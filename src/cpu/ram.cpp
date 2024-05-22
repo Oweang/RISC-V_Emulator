@@ -15,10 +15,11 @@ void Mem::Reset()
 Word Mem::ReadWord(XLEN Address)
 {
     Word buf;
-    buf = (RAM[Address] >> 24) |
-            ((RAM[Address + 1] << 8) & 0x00FF0000) |
-            ((RAM[Address + 2] >> 8) & 0x0000FF00) |
-            (RAM[Address + 3] << 24);
+    buf = 0;
+    buf =   ((Word) RAM[Address]);
+    buf |=  ((Word) RAM[Address + 1] << 8);
+    buf |=  ((Word) RAM[Address + 2] << 16);
+    buf |=  ((Word) RAM[Address + 3] << 24);
 
     return buf;
 }
