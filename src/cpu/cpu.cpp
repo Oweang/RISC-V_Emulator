@@ -126,3 +126,17 @@ void CPU::Execute(Mem& memory)
         }
     }
 }
+
+unsigned int CPU::GetRegValue(int reg)
+{
+    return regs[reg];
+}
+
+bool CPU::SetRegValue(int reg, XLEN value)
+{
+    // check reg value
+
+    regs[reg] = value;
+    
+    return true;
+}

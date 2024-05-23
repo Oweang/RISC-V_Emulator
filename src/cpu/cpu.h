@@ -46,4 +46,8 @@ class CPU
         void ExecuteRType(Word Inst, Mem& memory);
 
         void Execute(Mem& memory);
+
+        unsigned int GetRegValue(int reg);
+
+        bool SetRegValue(int reg, XLEN value);
 };

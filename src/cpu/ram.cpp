@@ -23,3 +23,15 @@ Word Mem::ReadWord(XLEN Address)
 
     return buf;
 }
+
+bool Mem::SetWord(XLEN Address, Word value)
+{
+    // verify address is correct
+
+    RAM[Address] = value & 0xFF;
+    RAM[Address + 1] = (value & 0xFF00) >> 8;
+    RAM[Address + 2] = (value & 0xFF0000) >> 16;
+    RAM[Address + 3] = (value & 0xFF000000) >> 24;
+
+    return true;
+}

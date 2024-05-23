@@ -16,4 +16,6 @@ class Mem
         void Reset();
 
         Word ReadWord(XLEN Address);
+
+        bool SetWord(XLEN Address, Word value);
 };
