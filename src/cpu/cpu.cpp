@@ -108,6 +108,116 @@ void CPU::ExecuteRType(Word Inst, Mem& memory)
     pc += RTYPE_SIZE;
 }
 
+void CPU::ExecuteItypeImm(Word Inst, Mem& memory)
+{
+    u8 rd       = (Inst >> 7) & 0b11111;
+    u8 funct3   = (Inst >> 12) & 0b111;
+    u8 rs1      = (Inst >> 15) & 0b11111;
+    u8 imm      = (Inst >> 20) & 0b111111111111;
+
+    switch (funct3)
+    {
+        case ADDI:
+        {
+            regs[rd] = regs[rs1] + imm;
+        } break;
+
+        case XORI:
+        {
+            regs[rd] = regs[rs1] ^ imm;
+        } break;
+
+        case ORI:
+        {
+            regs[rd] = regs[rs1] | imm;
+        } break;
+
+        case ANDI:
+        {
+            regs[rd] = regs[rs1] & imm;
+        } break;
+
+        case SLLI:
+        {
+            u8 imm511 = (imm >> 5) & 0b1111111;
+            u8 imm04 = imm & 0b11111;
+
+            switch (imm511)
+            {
+                case SLLIimm:
+                {
+                    regs[rd] = regs[rs1] << imm04;
+                } break;
+
+                default:
+                {
+                    std::cout << "unknown instruction" << std::endl;
+                }
+            }
+        } break;
+
+        case SRfunct3:
+        {
+            u8 imm511 = (imm >> 5) & 0b1111111;
+            u8 imm04 = imm & 0b11111;
+
+            switch (imm511)
+            {
+                case SRLIimm:
+                {
+                    regs[rd] = regs[rs1] >> imm04;
+                } break;
+
+                case SRAIimm:
+                {
+                    regs[rd] = ((signed int) regs[rs1]) >> imm04;
+                } break;
+
+                default:
+                {
+                    std::cout << "unknown instruction" << std::endl;
+                }
+            }
+        } break;
+
+        default:
+        {
+            std::cout << "unknown instruction" << std::endl;
+        }
+    }
+}
+
+void CPU::ExecuteIType(Word Inst, Mem& memory, u8 Opcode)
+{
+    switch (Opcode)
+    {
+        case ItypeImm:
+        {
+            ExecuteItypeImm(Inst, memory);
+        } break;
+
+        case ItypeLd:
+        {
+
+        } break;
+
+        case ItypeJ:
+        {
+            
+        } break;
+
+        case ItypeE:
+        {
+
+        } break;
+
+        default:
+        {
+            std::cout << "unknown instruction" << std::endl;
+        }
+    }
+}
+
 void CPU::Execute(Mem& memory)
 {
     Word Inst = FetchWord(memory);
@@ -118,6 +228,14 @@ void CPU::Execute(Mem& memory)
         case Rtype:
         {
             ExecuteRType(Inst, memory);
+        } break;
+
+        case ItypeImm:
+        case ItypeLd:
+        case ItypeJ:
+        case ItypeE:
+        {
+            ExecuteIType(Inst, memory, Opcode);
         } break;
 
         default:
